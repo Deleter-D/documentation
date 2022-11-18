@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "63fe5914-f1e2-4285-9a10-ea0d8b29bb93",
+		"name": "GarbageRecognition",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16510041"
+	},
+	"item": [
+		{
+			"name": "binding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var result = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.test(\"User binding successful\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.code).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"token\", result.object);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "code",
+							"value": "063LNu0w3P9KAZ28Bu1w3aiFww4LNu0-",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_rul}}/binding",
+					"host": [
+						"{{base_rul}}"
+					],
+					"path": [
+						"binding"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload-image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var result = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.test(\"Image upload succeeded\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.code).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"imageURL\", result.object);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/王彦澎/Desktop/test.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_rul}}/upload_image",
+					"host": [
+						"{{base_rul}}"
+					],
+					"path": [
+						"upload_image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recognition",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var result = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.test(\"Image recognition succeeded\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.code).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"recognitionRes\", result.object);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_rul}}/recognition?imageURL={{imageURL}}",
+					"host": [
+						"{{base_rul}}"
+					],
+					"path": [
+						"recognition"
+					],
+					"query": [
+						{
+							"key": "imageURL",
+							"value": "{{imageURL}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "history",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"History saved successfully\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.code).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "imageURL",
+							"value": "{{imageURL}}",
+							"type": "text"
+						},
+						{
+							"key": "result",
+							"value": "{{recognitionRes}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_rul}}/history",
+					"host": [
+						"{{base_rul}}"
+					],
+					"path": [
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "history",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"History read successfully\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.code).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_rul}}/history?token={{token}}",
+					"host": [
+						"{{base_rul}}"
+					],
+					"path": [
+						"history"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
